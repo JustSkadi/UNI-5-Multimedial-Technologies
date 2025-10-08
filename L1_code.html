@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+ <head>
+ <title>TM L1</title>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+ <!-- <link rel="stylesheet" type="text/css" href="css/xxxxxxx.css" /> -->
+ </head>
+ <body>
+ <!--
+ --- materiały o JS:
+ --- https://2ality.com/2025/08/learning-web-dev-toc.html
+ --- https://www.youtube.com/playlist?list=PLlrxD0HtieHhW0NCG7M536uHGOtJ95Ut2
+ -->
+ <h1>TM L1 &ndash; osadzanie plików multimedialnych na stronie www </h1>
+ 
+ <h2>Tutaj znajduje się plik audio.</h2>
+ <audio id="audioPlayer" controls>
+   <source src="audio do analizy/01.m4a" type="audio/mp4">
+ </audio>
+ <br><br>
+ <button onclick="sterujAudio()">Steruj audio</button>
+ 
+ <h2>Tutaj znajduje się plik video.</h2>
+ <video id="videoPlayer" controls width="640">
+   <source src="wideo do analizy/01.mp4" type="video/mp4">
+ </video>
+ <br><br>
+ <button onclick="sterujWideo()">Steruj wideo</button>
+ 
+ <script>
+   const sterujAudio = () => {
+     const audioElement = document.getElementById('audioPlayer');
+     
+     if (audioElement.paused) {
+       audioElement.play();
+     } else {
+       audioElement.pause();
+     }
+   }
+   
+   const sterujWideo = () => {
+     const videoElement = document.getElementById('videoPlayer');
+     
+     if (videoElement.paused) {
+       videoElement.play();
+     } else {
+       videoElement.pause();
+     }
+   }
+ </script>
+ </body>
+</html>
