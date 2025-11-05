@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista 3 - Web Audio API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .control {
+            margin: 20px 0;
+        }
+        input[type="range"] {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Technologie Multimedialne - Lista 3</h1>
+    <audio id="audioPlayer" controls loop>
+        <source src="vlog-beat-background-349853.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="control">
+        <h3>Zadanie 1</h3>
+        <label>Szybkość odtwarzania (50-500%): <span id="speedValue">100%</span></label>
+        <input type="range" id="speedSlider" min="0.5" max="5" step="0.1" value="1">
+        
+        <br><br>
+        
+        <label>Wysokość dźwięku (50-150%): <span id="pitchValue">100%</span></label>
+        <input type="range" id="pitchSlider" min="0.5" max="1.5" step="0.01" value="1">
+    </div>
+
+    <div class="control">
+        <h3>Zadanie 2</h3>
+        <label>Częstotliwość A (Hz): <span id="freqAValue">10</span></label>
+        <input type="range" id="freqASlider" min="10" max="20000" value="10">
+        
+        <br><br>
+        
+        <label>Częstotliwość B (Hz): <span id="freqBValue">10</span></label>
+        <input type="range" id="freqBSlider" min="10" max="20000" value="10">
+    </div>
+
+    <script src="audio.js"></script>
+</body>
+</html>
