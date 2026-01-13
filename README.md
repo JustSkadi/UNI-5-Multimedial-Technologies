@@ -27,3 +27,4 @@ pip install -r requirements.txt
 ```
 
 Wszystkie listy oraz programy są dodane na adekwatne branche / All lists and codes are added to adequate branches
+http://localhost:8000/index.html?room=test
