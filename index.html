@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loginPanel">
+        <h2>Wejdź do pokoju</h2>
+        <input type="text" id="roomName" placeholder="Nazwa pokoju">
+        <input type="text" id="username" placeholder="Twój nick">
+        <button id="joinBtn">Dołącz</button>
+    </div>
+
+    <div id="mainPanel" class="hidden">
+        <div class="top-bar">
+            <span>Pokój: <strong id="currentRoom"></strong> | <strong id="currentUser"></strong></span>
+            <button id="leaveBtn">Wyjdź</button>
+        </div>
+
+        <div class="controls">
+            <button id="toggleVideoBtn">Włącz wideo</button>
+            <button id="toggleAudioBtn">Włącz audio</button>
+            <button id="shareScreenBtn">Udostępnij ekran</button>
+        </div>
+
+        <div class="videos">
+            <div>
+                <video id="localVideo" autoplay muted playsinline></video>
+                <span>Ty</span>
+            </div>
+            <div>
+                <video id="remoteVideo" autoplay playsinline></video>
+                <span id="remoteLabel">Czekam...</span>
+            </div>
+        </div>
+
+        <div class="chat">
+            <div id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Wiadomość...">
+                <button id="sendBtn">Wyślij</button>
+            </div>
+        </div>
+
+        <div class="status">
+            <div id="connectionStatus">Rozłączony</div>
+        </div>
+    </div>
+
+    <script src="https://download.agora.io/sdk/release/AgoraRTM_v1.5.1.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
