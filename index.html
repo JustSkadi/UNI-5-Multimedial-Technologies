@@ -3,54 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Chat</title>
+    <title>Wideorozmowa P2P</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="loginPanel">
-        <h2>Wejdź do pokoju</h2>
-        <input type="text" id="roomName" placeholder="Nazwa pokoju">
-        <input type="text" id="username" placeholder="Twój nick">
-        <button id="joinBtn">Dołącz</button>
+    <div class="container">
+        <header>
+            <h1>Wideorozmowa</h1>
+            <p id="room-info">Ładowanie pokoju...</p>
+        </header>
+
+        <section class="video-section">
+            <div class="video-box">
+                <video id="user-1" autoplay playsinline muted></video>
+                <span class="label">Ty</span>
+            </div>
+            <div class="video-box">
+                <video id="user-2" autoplay playsinline></video>
+                <span class="label">Rozmówca</span>
+            </div>
+        </section>
+
+        <section class="control-section">
+            <button id="camera-btn" class="btn">Kamera: Włączona</button>
+            <button id="mic-btn" class="btn">Mikrofon: Włączony</button>
+        </section>
+
+        <section class="chat-section">
+            <h3>Czat</h3>
+            <div id="messages" class="chat-box"></div>
+            <form id="message-form" class="chat-form">
+                <input type="text" name="message" placeholder="Wpisz wiadomość" autocomplete="off"/>
+                <button type="submit" class="btn-send">Wyślij</button>
+            </form>
+        </section>
     </div>
 
-    <div id="mainPanel" class="hidden">
-        <div class="top-bar">
-            <span>Pokój: <strong id="currentRoom"></strong> | <strong id="currentUser"></strong></span>
-            <button id="leaveBtn">Wyjdź</button>
-        </div>
-
-        <div class="controls">
-            <button id="toggleVideoBtn">Włącz wideo</button>
-            <button id="toggleAudioBtn">Włącz audio</button>
-            <button id="shareScreenBtn">Udostępnij ekran</button>
-        </div>
-
-        <div class="videos">
-            <div>
-                <video id="localVideo" autoplay muted playsinline></video>
-                <span>Ty</span>
-            </div>
-            <div>
-                <video id="remoteVideo" autoplay playsinline></video>
-                <span id="remoteLabel">Czekam...</span>
-            </div>
-        </div>
-
-        <div class="chat">
-            <div id="chatMessages"></div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Wiadomość...">
-                <button id="sendBtn">Wyślij</button>
-            </div>
-        </div>
-
-        <div class="status">
-            <div id="connectionStatus">Rozłączony</div>
-        </div>
-    </div>
-
-    <script src="https://download.agora.io/sdk/release/AgoraRTM_v1.5.1.js"></script>
-    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/agora-rtm-sdk@1.5.1/index.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
