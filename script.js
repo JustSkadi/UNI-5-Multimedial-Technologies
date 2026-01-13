@@ -7,7 +7,7 @@ const rtcConfig = {
 };
 
 let authToken = null;
-let userId = String(Math.floor(Math.random() * 10000));
+let userId = String(Math.floor(Math.random() * 100));
 let rtmClient;
 let rtmChannel;
 let userLocalStream;
