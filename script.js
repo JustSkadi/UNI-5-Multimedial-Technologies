@@ -1,4 +1,4 @@
-const AGORA_APP_ID = "356766edfd214e01adc6c3eeba2b4af1";
+const AGORA_APP_ID = "94b1dd16cd1148e18cef541cb9bc5ce7";
 
 const rtcConfig = {
     iceServers: [
