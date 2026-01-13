@@ -34,6 +34,7 @@ audio.addEventListener('play', function() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         source = audioContext.createMediaElementSource(audio);
+
         analyserSpectrum = audioContext.createAnalyser();
         analyserSpectrum.fftSize = 2048;
         analyserSpectrum.smoothingTimeConstant = 0.8;
@@ -48,6 +49,7 @@ audio.addEventListener('play', function() {
         source.connect(splitter);
         splitter.connect(leftAnalyser, 0);
         splitter.connect(rightAnalyser, 1);
+        
         analyserSpectrum.connect(audioContext.destination);
         maxAmplitudes = new Array(analyserSpectrum.frequencyBinCount).fill(0);
     }
@@ -115,7 +117,7 @@ function drawOscilloscope() {
     if (rightChannelEnabled) {
         const dataArray = new Uint8Array(rightAnalyser.fftSize);
         rightAnalyser.getByteTimeDomainData(dataArray);
-        
+
         oscilloscopeCtx.lineWidth = 2;
         oscilloscopeCtx.strokeStyle = 'rgb(255, 107, 107)';
         oscilloscopeCtx.beginPath();
