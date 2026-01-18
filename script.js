@@ -1,4 +1,5 @@
-const AGORA_APP_ID = "94b1dd16cd1148e18cef541cb9bc5ce7";
+const AGORA_APP_ID = "d7b5402931ae4acbb01572d9a6655abf";
+const REQUIRED_PASSWORD = "admin";
 
 const rtcConfig = {
     iceServers: [
@@ -22,22 +23,51 @@ if (!currentRoom) {
     window.history.replaceState(null, null, `?room=${currentRoom}`);
 }
 
-document.getElementById('room-info').innerText = `Pokój: ${currentRoom}`;
+document.getElementById('auth-form').addEventListener('submit', function(evt) {
+    evt.preventDefault();
+    const passwordInput = document.getElementById('password-input');
+    const enteredPassword = passwordInput.value;
+    const errorDiv = document.getElementById('auth-error');
+    
+    if (enteredPassword === REQUIRED_PASSWORD) {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('room-info').innerText = `Pokój: ${currentRoom}`;
+        initializeApp();
+    } else {
+        errorDiv.style.display = 'block';
+        passwordInput.value = '';
+        passwordInput.focus();
+        
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 3000);
+    }
+});
 
 async function setupLocalMedia() {
-    userLocalStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    document.getElementById('user-1').srcObject = userLocalStream;
+    try {
+        userLocalStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('user-1').srcObject = userLocalStream;
+    } catch (error) {
+        console.error('Błąd dostępu do kamery/mikrofonu:', error);
+        alert('Nie udało się uzyskać dostępu do kamery lub mikrofonu.');
+    }
 }
 
 async function connectToAgoraRTM() {
-    rtmClient = await AgoraRTM.createInstance(AGORA_APP_ID);
-    await rtmClient.login({ uid: userId, token: authToken });
-    rtmChannel = rtmClient.createChannel(currentRoom);
-    await rtmChannel.join();
-    rtmChannel.on('MemberJoined', onUserJoined);
-    rtmClient.on('MessageFromPeer', onPeerMessage);
-    rtmChannel.on('ChannelMessage', onChannelMessage);
-    console.log('Zalogowano i dołączono do:', currentRoom);
+    try {
+        rtmClient = await AgoraRTM.createInstance(AGORA_APP_ID);
+        await rtmClient.login({ uid: userId, token: authToken });
+        rtmChannel = rtmClient.createChannel(currentRoom);
+        await rtmChannel.join();
+        rtmChannel.on('MemberJoined', onUserJoined);
+        rtmClient.on('MessageFromPeer', onPeerMessage);
+        rtmChannel.on('ChannelMessage', onChannelMessage);
+        console.log('Zalogowano i dołączono do:', currentRoom);
+    } catch (error) {
+        console.error('Błąd połączenia z Agora RTM:', error);
+    }
 }
 
 async function initializeApp() {
@@ -109,11 +139,14 @@ async function handleFormSubmit(evt) {
     evt.preventDefault();
     let formElement = evt.target;
     let messageText = formElement.message.value;
-    await rtmChannel.sendMessage({ 
-        text: JSON.stringify({'type': 'chat', 'message': messageText, 'displayName': 'Użytkownik ' + userId}) 
-    });
-    displayMessage('Ja', messageText, true);
-    formElement.reset();
+    
+    if (messageText.trim()) {
+        await rtmChannel.sendMessage({ 
+            text: JSON.stringify({'type': 'chat', 'message': messageText, 'displayName': 'Użytkownik ' + userId}) 
+        });
+        displayMessage('Ja', messageText, true);
+        formElement.reset();
+    }
 }
 
 async function onChannelMessage(messageData, memberId) {
@@ -162,5 +195,3 @@ async function switchMicrophone() {
 
 document.getElementById('camera-btn').addEventListener('click', switchCamera);
 document.getElementById('mic-btn').addEventListener('click', switchMicrophone);
-
-initializeApp();

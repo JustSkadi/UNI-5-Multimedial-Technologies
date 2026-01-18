@@ -7,9 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div id="auth-section" class="auth-container">
+        <div class="auth-box">
+            <p>Hasło:</p>
+            <div id="auth-form">
+                <input type="password" id="password-input" placeholder="Hasło" required>
+                <button type="button" id="login-btn" class="btn-auth">Połącz</button>
+            </div>
+            <div id="auth-error" class="error-message" style="display: none;">
+                Nieprawidłowe hasło.
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app" class="container" style="display: none;">
         <header>
-            <h1>Wideorozmowa</h1>
             <p id="room-info">Ładowanie pokoju...</p>
         </header>
 
@@ -40,6 +52,86 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/agora-rtm-sdk@1.5.1/index.js"></script>
-    <script src="script.js"></script>
+    <script>
+        function checkPassword() {
+            const passwordInput = document.getElementById('password-input');
+            const enteredPassword = passwordInput.value;
+            const errorDiv = document.getElementById('auth-error');
+            const authSection = document.getElementById('auth-section');
+            const mainApp = document.getElementById('main-app');
+            
+            if (enteredPassword === 'admin') {
+                console.log('Hasło poprawne!');
+                authSection.style.display = 'none';
+                mainApp.style.display = 'block';
+                
+                const params = new URLSearchParams(window.location.search);
+                let currentRoom = params.get('room') || 'main';
+                document.getElementById('room-info').innerText = `Pokój: ${currentRoom}`;
+                console.log('Pokój ustawiony:', currentRoom);
+                
+                loadMainScript();
+            } else {
+                console.log('Hasło niepoprawne');
+                errorDiv.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function loadMainScript() {
+            const script = document.createElement('script');
+            script.src = 'script.js';
+            script.onload = function() {
+                console.log('Script.js załadowany pomyślnie');
+            };
+            script.onerror = function() {
+                console.error('Błąd podczas ładowania script.js');
+            };
+            document.head.appendChild(script);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginBtn = document.getElementById('login-btn');
+            const passwordInput = document.getElementById('password-input');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    checkPassword();
+                });
+            }
+            
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkPassword();
+                    }
+                });
+            }
+        });
+
+        if (document.readyState !== 'loading') {
+            setTimeout(function() {
+                const loginBtn = document.getElementById('login-btn');
+                const passwordInput = document.getElementById('password-input');
+                
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', checkPassword);
+                }
+                
+                if (passwordInput) {
+                    passwordInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            checkPassword();
+                        }
+                    });
+                }
+            }, 100);
+        }
+        
+    </script>
 </body>
 </html>
