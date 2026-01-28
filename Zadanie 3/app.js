@@ -370,10 +370,50 @@ document.getElementById('btn-play-decoded').addEventListener('click', async () =
     }
 });
 
+document.getElementById('btn-update-config').addEventListener('click', () => {
+    if (encoder && encoder.state !== 'closed' && recordingActive) {
+        const updatedBitrate = parseFloat(document.getElementById('bitrate').value) * 1_000_000;
+        const updatedFps = parseInt(document.getElementById('fps').value);
+        
+        try {
+            const updatedConfig = {
+                codec: cachedDecoderConfig.codec,
+                width: cachedDecoderConfig.width,
+                height: cachedDecoderConfig.height,
+                bitrate: updatedBitrate,
+                framerate: updatedFps,
+                bitrateMode: 'variable'
+            };
+            
+            if (cachedDecoderConfig.codec.includes('avc')) {
+                updatedConfig.avc = { format: 'annexb' };
+            }
+            
+            encoder.configure(updatedConfig);
+            
+            cachedDecoderConfig.bitrate = updatedBitrate;
+            cachedDecoderConfig.framerate = updatedFps;
+            captureFrames(updatedFps);
+            
+            addLogEntry(`✓ Zmieniono bitrate: ${(updatedBitrate/1e6).toFixed(1)} Mbps, FPS: ${updatedFps}`);
+        } catch (error) {
+            addLogEntry("Błąd zmiany parametrów: " + error.message);
+        }
+    } else {
+        const bitrate = parseFloat(document.getElementById('bitrate').value);
+        const fps = parseInt(document.getElementById('fps').value);
+        const keyInterval = parseInt(document.getElementById('key-interval').value);
+        const codec = codecDropdown.options[codecDropdown.selectedIndex].text;
+        
+        addLogEntry(`Parametry gotowe: ${codec}, ${bitrate}Mbps, ${fps}FPS, Klatki co ${keyInterval}`);
+    }
+});
+
 function updateButtonStates(isRecording) {
     document.getElementById('btn-start').disabled = isRecording;
     document.getElementById('btn-stop').disabled = !isRecording;
     document.getElementById('codec-select').disabled = isRecording;
+    document.getElementById('btn-update-config').disabled = false;
     
     if (isRecording) {
         document.getElementById('btn-play-native').disabled = true;
