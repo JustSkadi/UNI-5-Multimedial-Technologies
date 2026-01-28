@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCodecs Laboratory - Z3</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/webm-muxer@5.0.0/build/webm-muxer.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Z3: Eksperymenty z WebCodecs i WebM</h1>
+        </header>
+
+        <main class="grid-layout">
+            <section class="controls-panel">
+                <h2>1. Źródło wideo</h2>
+                <div class="control-group">
+                    <button id="btn-camera">Włącz Kamerę</button>
+                    <input type="file" id="file-input" accept="video/*">
+                </div>
+
+                <h2>2. Parametry Enkodera</h2>
+                <div class="control-group">
+                    <label>Kodek:
+                        <select id="codec-select">
+                            <option value="" disabled selected>Sprawdzanie wsparcia...</option>
+                        </select>
+                    </label>
+                    
+                    <label>Bitrate (Mbps): <span id="bitrate-val">2</span>
+                        <input type="range" id="bitrate" min="0.5" max="10" step="0.5" value="2">
+                    </label>
+                    
+                    <label>Framerate (FPS): <span id="fps-val">30</span>
+                        <input type="range" id="fps" min="15" max="60" step="5" value="30">
+                    </label>
+                    
+                    <label>Interwał klatek kluczowych:
+                        <input type="number" id="key-interval" value="30">
+                    </label>
+                    
+                    <button id="btn-update-config" disabled>Zastosuj zmiany</button>
+                </div>
+
+                <h2>3. Sterowanie procesem</h2>
+                <div class="control-group buttons">
+                    <button id="btn-start" class="primary">Rozpocznij</button>
+                    <button id="btn-stop" class="danger" disabled>Zatrzymaj</button>
+                </div>
+
+                <h2>4. Odtwarzanie (Dekoder)</h2>
+                <div class="control-group">
+                    <label>Strategia bufora:
+                        <select id="buffer-strategy">
+                            <option value="normal">Normalna</option>
+                            <option value="low-latency">Niskie opóźnienie</option>
+                        </select>
+                    </label>
+                    
+                    <button id="btn-play-decoded" disabled>Canvas Preview</button>
+                    <button id="btn-play-native" disabled>Video Player</button>
+                </div>
+            </section>
+
+            <section class="video-panel">
+                <div class="video-box">
+                    <h3>Źródło</h3>
+                    <video id="video-source" autoplay muted playsinline loop></video>
+                </div>
+                
+                <div class="video-box">
+                    <h3>Podgląd</h3>
+                    <canvas id="video-output"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <section class="stats-panel">
+            <h3>Statystyki & Konsola</h3>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    Chunks: <span id="stat-chunks">0</span>
+                </div>
+                <div class="stat-box">
+                    Rozmiar: <span id="stat-size">0</span> MB
+                </div>
+                <div class="stat-box">
+                    Opóźnienie Enk.: <span id="stat-latency">0</span> ms
+                </div>
+                <div class="stat-box">
+                    Klatki Kluczowe: <span id="stat-keyframes">0</span>
+                </div>
+            </div>
+            
+            <div id="logs" class="logs-console"></div>
+        </section>
+    </div>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>

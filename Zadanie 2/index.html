@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 Zadanie 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="control-panel">
+            <h2>Ustawienia Enkodera</h2>
+            
+            <label>Zrodlo wideo</label>
+            <select id="videoSource">
+                <option value="camera">Kamera (Live)</option>
+                <option value="file">Plik lokalny</option>
+            </select>
+            <input type="file" id="videoFile" style="display:none" accept="video/*">
+
+            <label>Kodek</label>
+            <select id="codec">
+                <option value="avc1.42001E">H.264 Baseline</option>
+                <option value="avc1.4D401E" selected>H.264 Main</option>
+                <option value="avc1.64001F">H.264 High</option>
+                <option value="vp09.00.10.08">VP9</option>
+            </select>
+
+            <label>Bitrate: <span id="bitrateValue">2000</span> kbps</label>
+            <input type="range" id="bitrate" min="500" max="8000" step="100" value="2000">
+
+            <label>FPS: <span id="framerateValue">30</span></label>
+            <input type="range" id="framerate" min="10" max="60" step="5" value="30">
+
+            <label>Interwal klatek kluczowych: <span id="keyframeIntervalValue">60</span> klatek</label>
+            <input type="range" id="keyframeInterval" min="10" max="300" step="10" value="60">
+
+            <label>Dlugosc segmentu: <span id="segmentDurationValue">2000</span> ms</label>
+            <input type="range" id="segmentDuration" min="1000" max="10000" step="500" value="2000">
+
+            <label>Tryb kontroli bitrate</label>
+            <select id="rateControl">
+                <option value="variable">VBR (Zmienny)</option>
+                <option value="constant">CBR (Staly)</option>
+            </select>
+
+            <div class="button-group">
+                <button id="startBtn" class="btn-primary">URUCHOM KODOWANIE</button>
+                <button id="applyBtn" class="btn-apply">ZASTOSUJ ZMIANY</button>
+                <button id="stopBtn" class="btn-danger" disabled>STOP</button>
+            </div>
+        </aside>
+
+        <main class="display-area">
+            <div class="video-preview">
+                <video id="sourceVideo" muted autoplay playsinline></video>
+                <div class="overlay">
+                    <span class="badge">Live Preview</span>
+                </div>
+            </div>
+
+            <div class="metrics-bar">
+                <div class="metric">
+                    <div class="metric-label">Klatki</div>
+                    <div class="metric-value" id="totalFrames">0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Kluczowe</div>
+                    <div class="metric-value" id="keyframeCount">0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Opoznienie</div>
+                    <div class="metric-value" id="avgLatency">0 ms</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Bitrate</div>
+                    <div class="metric-value" id="currentBitrate">0 kbps</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-wrapper">
+                    <h3>Segmenty - WLASNA SEGMENTACJA (KB)</h3>
+                    <canvas id="segmentChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Segmenty - MP4BOX (KB)</h3>
+                    <canvas id="mp4boxSegmentChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-wrapper">
+                    <h3>Opoznienie enkodera w czasie rzeczywistym (ms)</h3>
+                    <canvas id="latencyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="segments-log">
+                <h3>Wygenerowane segmenty - WLASNA SEGMENTACJA</h3>
+                <div id="segmentsList" class="segments-list-content">
+                    <div class="no-segments">Brak segmentow - rozpocznij kodowanie</div>
+                </div>
+            </div>
+            
+            <div class="segments-log">
+                <h3>Wygenerowane segmenty - MP4BOX</h3>
+                <div id="mp4boxSegmentsList" class="segments-list-content">
+                    <div class="no-segments">Brak segmentow</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/mp4box@0.5.2/dist/mp4box.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <script src="app.js"></script>
+</body>
+</html>
